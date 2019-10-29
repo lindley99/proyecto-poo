@@ -13,8 +13,8 @@ int main() {
     ifstream fi;
     fi.open(fichero);
     if(fi.is_open()){
-        fi>>n>>m;   //fila y columna
-        cout<<n<<","<<m<<endl;
+        fi>>n>>m;   //fila y columna dimensiones
+
         /***creacion de matrix**/
         matrix = new int*[n]; //n filas
         for(int i = 0; i < n; i++){
@@ -24,16 +24,17 @@ int main() {
             }
         }
         int obstaculos;
-        fi>>obstaculos;
+        fi>>obstaculos;  //2 linea del txt
         int fil,col;
         while(obstaculos--){
-            fi>>fil>>col;
+            fi>>fil>>col;     //leyendo las coordenadas
             matrix[fil][col]=-1;
         }
         fi.close();
     }
     else cerr<<"Error de lectura\n";
-    matrix[0][0] = 0;
+
+    matrix[0][0] = 0; //punto inicial
 
     priority_queue<pair<int,pair<int,int>>> cola;
 
@@ -42,35 +43,35 @@ int main() {
     while(!cola.empty()){
         int dist = cola.top().first;
         pair<int,int> coord = cola.top().second;
-        cola.pop();
+        cola.pop(); //elimino de la cola
         int fil = coord.first;
         int col = coord.second;
-        if(fil-1 >= 0) {
-            if(matrix[fil-1][col] != -1){
+        if(fil-1 >= 0) {  //verificar si no estoy en la primera fila
+            if(matrix[fil-1][col] != -1){ //verificar si no es obstaculo
                 if(dist+1 < matrix[fil-1][col]){
                     matrix[fil-1][col]=dist+1;
                     cola.push(make_pair(dist+1,make_pair(fil-1,col)));
                 }
             }
         }
-        if(fil+1 != n) {
-            if(matrix[fil+1][col] != -1){
+        if(fil+1 != n) { //verificar si no estoy en la ultima fila
+            if(matrix[fil+1][col] != -1){ //verificar si no es obstaculo
                 if(dist+1 < matrix[fil+1][col]){
                     matrix[fil+1][col] = dist+1;
                     cola.push(make_pair(dist+1,make_pair(fil+1,col)));
                 }
             }
         }
-        if(col-1 >= 0) {
-            if(matrix[fil][col-1] != 1){
+        if(col-1 >= 0) { //verificar si no estoy en la primera columna
+            if(matrix[fil][col-1] != 1){ //verificar si no es obstaculo
                 if(dist+1< matrix[fil][col-1]){
                     matrix[fil][col-1] = dist+1;
                     cola.push(make_pair(dist+1,make_pair(fil,col-1)));
                 }
             }
         }
-        if(col+1 != m) {
-            if(matrix[fil][col+1] != 1){
+        if(col+1 != m) { //verificar si no estoy en la ultima columna
+            if(matrix[fil][col+1] != 1){ //verificar si no es obstaculo
                 if(dist+1  < matrix[fil][col+1]){
                     matrix[fil][col+1] = dist+1;
                     cola.push(make_pair(dist+1,make_pair(fil,col+1)));
